@@ -13,11 +13,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className="flex flex-col w-full gap-10"
+        className="flex flex-col w-full h-screen justify-between gap-10"
       >
         <div className="bg-brand-300 w-full h-[50vh] absolute top-0 left-0 right-0" />
         
-        <main className="relative w-full flex justify-center h-full">
+        <main className="relative w-full flex justify-center">
           <div className="bg-neutral-0 w-3/4   flex flex-col justify-center px-9 py-10 mt-9 rounded-xl shadow-lg">
             {children}
           </div>
