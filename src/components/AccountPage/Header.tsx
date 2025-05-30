@@ -5,12 +5,11 @@ import ChevronLeftIcon from '@/assets/chevron-left-arrow.svg';
 import Image from "next/image";
 
 export function Header() {
-    const { back } = useRouter()
+    const { back , push } = useRouter()
     const userProfileMenu  = [
-        { text: "Configurações", onClick: () => console.log("click configurações") },
+        { text: "Configurações", onClick: () => push('/account/configuration') },
         { text: "Sair", onClick: () => console.log("click sair") },
     ];
-
 
     return (
         <header className="flex justify-center items-center gap-7">
