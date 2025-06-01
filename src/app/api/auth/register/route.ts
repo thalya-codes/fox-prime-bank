@@ -8,9 +8,10 @@ import { connectDB } from '@/app/lib/db';
 export async function POST(req: NextRequest) {
   await connectDB();
 
-  const { fullName, birthDate, email, password } = await req.json();
+  const { fullName, birthDate, email, password , acceptTerm }  = await req.json();
 
   const existing = await User.findOne({ email });
+
   if (existing) {
     return NextResponse.json({ message: 'Email already exists' }, { status: 400 });
   }
@@ -22,10 +23,11 @@ export async function POST(req: NextRequest) {
     birthDate,
     email,
     password: hashedPassword,
+    acceptTerm
   });
 
   const accountNumber = uuidv4();
-
+  
   await Account.create({
     userId: user._id,
     accountNumber,
@@ -33,11 +35,13 @@ export async function POST(req: NextRequest) {
   });
 
   return NextResponse.json({
-    message: 'User registered successfully',
+    message: 'Conta aberta com sucesso',
     user: {
+      userId: user._id,
       email: user.email,
       fullName: user.fullName,
-      accountNumber
+      accountNumber,
+      acceptTerm
     }
   });
 }
