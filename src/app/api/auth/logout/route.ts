@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import cookie from 'cookie';
-import { connectDB } from '@/app/lib/db';
 import User from '@/app/models/User';
+import { authMiddleware } from '@/app/middleware/authMiddleware';
 
 export async function POST(req: NextRequest) {
-  await connectDB();
+  const authResponse = await authMiddleware(req)
+  if(authResponse instanceof NextResponse) return authResponse
 
   const cookies = cookie.parse(req.headers.get('cookie') || '');
   const refreshToken = cookies.refreshToken;
