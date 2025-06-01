@@ -10,22 +10,32 @@
   },
   "dependencies": {
     "autoprefixer": "^10.4.21",
+    "bcryptjs": "^3.0.2",
+    "cookie": "^1.0.2",
+    "express": "^5.1.0",
     "fox-neo-design-system": "^1.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.15.1",
     "next": "15.3.2",
     "postcss": "^8.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.56.4",
-    "tailwindcss": "^3.3.5"
+    "tailwindcss": "^3.3.5",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/express": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^16.5.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
     "typescript": "^5"
