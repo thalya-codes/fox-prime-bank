@@ -20,7 +20,8 @@ export async function GET(req: NextRequest, { params: { userId, transactionId } 
 
   const transaction = await Transaction.findOne({
     _id: transactionId,
-    userId: userId,
+    senderId: userId,
+    receiverId: userId
   });
 
   if (!transaction) {
@@ -37,7 +38,11 @@ export async function PATCH(req: NextRequest, { params: { userId, transactionId 
   const body = await req.json();
 
   const transaction = await Transaction.findOneAndUpdate(
-    { _id: transactionId, userId: userId },
+    { 
+      _id: transactionId,     
+      senderId: userId,
+     receiverId: userId 
+    },
     { $set: body },
     { new: true }
   );
@@ -55,7 +60,8 @@ export async function DELETE(req: NextRequest, { params: { userId, transactionId
 
   const result = await Transaction.deleteOne({
     _id: transactionId,
-    userId: userId,
+    senderId: userId,
+    receiverId: userId
   });
 
   if (result.deletedCount === 0) {

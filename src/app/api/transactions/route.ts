@@ -5,13 +5,13 @@ import { authMiddleware } from '@/app/middleware/authMiddleware';
 import { JwtPayload } from 'jsonwebtoken';
 import User from '@/app/models/User';
 
-//Cria uma nova transacao
+
 export async function POST(req: NextRequest) {
   const authResponse = await authMiddleware(req) as JwtPayload
   if(authResponse instanceof NextResponse) return authResponse
 
   //Extrai infos 
-  const { fromAccountNumber, toAccountNumber, amount, description } = await req.json();
+  const { fromAccountNumber, toAccountNumber, amount, description, nature } = await req.json();
 
   //Verifica busca usuário responsável pelo envio e verifica se ele está cadastrado
   const userSender = await User.findById((authResponse).userId);
@@ -25,10 +25,7 @@ export async function POST(req: NextRequest) {
   }
 
   
-  const recipientUser = await User.findById((authResponse).userId);
-  if (!recipientUser) return NextResponse.json({ message: 'Recipient user not found' }, { status: 404 });
 
- 
 
   
   // Verifica se a conta pertence ao usuário autenticado
@@ -38,6 +35,10 @@ export async function POST(req: NextRequest) {
 
   // Busca a conta de destino
   const toAccount = await Account.findOne({ accountNumber: toAccountNumber });
+
+  const receiverUser = await User.findById(toAccount.userId);
+  // return NextResponse.json(toAccount)
+  if (!receiverUser) return NextResponse.json({ message: 'Recipient user not found' }, { status: 404 });
 
   if (!toAccount) {
     return NextResponse.json({ message: 'Conta de destino não encontrada.' }, { status: 404 });
@@ -56,13 +57,30 @@ export async function POST(req: NextRequest) {
   await toAccount.save();
 
   // Registra a transação
-  await Transaction.create({
+  const outgoingTransaction = await Transaction.create({
     amount,
-    type: 'SEND',
     description,
-    userId: fromAccount.userId,
-    targetAccountId: toAccount._id,
+    nature,
+    senderId: userSender._id,
+    senderName: userSender.fullName,
+    receiverId: receiverUser._id,
+    receiverName: receiverUser.fullName,
+    direction: 'OUTGOING'
   });
 
-  return NextResponse.json({ message: 'Transferência realizada com sucesso.' }, { status: 200 });
+  const incomingTransaction = await Transaction.create({
+    amount,
+    description,
+    nature,
+    senderId: userSender._id,
+    senderName: userSender.fullName,
+    receiverId: receiverUser._id,
+    receiverName: receiverUser.fullName,
+    direction: 'INCOMING'
+  });
+
+  await outgoingTransaction.save();
+  await incomingTransaction.save();
+
+  return NextResponse.json({ message: 'Transferência realizada com sucesso.' }, { status: 201 });
 }
