@@ -6,6 +6,7 @@ export type TUser  =  {
   email: string;
   password: string;
   refreshToken: string | null;
+  _id: string
 } & Document
 
 
