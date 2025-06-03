@@ -41,11 +41,11 @@ export async function PATCH(req: NextRequest, { params: { userId, transactionId 
     { 
       _id: transactionId,     
       senderId: userId,
-     receiverId: userId 
     },
     { $set: body },
     { new: true }
   );
+
 
   if (!transaction) {
     return NextResponse.json({ error: 'Transação não encontrada' }, { status: 404 });
@@ -61,7 +61,6 @@ export async function DELETE(req: NextRequest, { params: { userId, transactionId
   const result = await Transaction.deleteOne({
     _id: transactionId,
     senderId: userId,
-    receiverId: userId
   });
 
   if (result.deletedCount === 0) {

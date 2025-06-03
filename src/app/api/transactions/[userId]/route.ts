@@ -10,7 +10,7 @@ export async function GET(req: NextRequest, { params }: TParams) {
   const authResponse = await authMiddleware(req)
   if(authResponse instanceof NextResponse) return authResponse 
 
-  const transactions = await Transaction.find({senderId: params.userId})
+  const transactions = await Transaction.find({senderId: params.userId, direction: 'INCOMING' })
   
   if(!transactions) return NextResponse.json([], {status: 200})
   
