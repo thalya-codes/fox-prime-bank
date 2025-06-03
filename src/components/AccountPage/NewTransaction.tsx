@@ -33,14 +33,14 @@ export function NewTransaction() {
             toAccountNumber: data.receiverAccount as string,
             nature: "TRANSFER" as 'TRANSFER',
             description:  data?.description || '',
-            amount: data.amount as number
+            amount: Number(data.amount) as number
         }
 
         await mutateAsync(payload)
-        reset()
         await userAccount?.refetch()
         await transactions?.refetch()
-        
+         reset()
+
     }
     
 
