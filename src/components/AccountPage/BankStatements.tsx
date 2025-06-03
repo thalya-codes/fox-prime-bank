@@ -43,10 +43,10 @@ export function BankStatements() {
 
   return  (
         <>
-            <Card.Root variant="outlined" className="flex flex-col gap-7 xl:w-5/12 overflow-auto bg-red-400">
+            <Card.Root variant="outlined" className="flex flex-col gap-7 xl:w-5/12 overflow-auto h-max">
                 <Card.Title className="text-brand-800 text-center" size='lg'>Extratos</Card.Title>
                 <ul className="flex flex-col gap-6 h-full">
-                    {transactions?.data?.map((item) => (
+                    {(transactions?.data?.length === 0 || !transactions?.data) ? <p className=" w-full justify-center font-title text-md text-brand-700 text-center">Você ainda não possui nenhum extrato</p>: transactions?.data?.map((item) => (
                         <Card.Root key={item._id}>
                             <div className="flex justify-between">
                                 <Card.Title className="text-brand-800">Transferência</Card.Title>
