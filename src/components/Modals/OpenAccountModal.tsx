@@ -1,29 +1,48 @@
 import { useForm } from "react-hook-form";
-import { Button, Checkbox, FormGroupLabel, FormGroupRoot, Input, Modal, TModal } from "fox-neo-design-system";
+import { Button, Checkbox, FormGroupLabel, FormGroupRoot, Input, Modal } from "fox-neo-design-system";
 import { ErrorMessage } from "../ErrorMessage";
-import { TOpenAccountFormModal } from "./types";
+import { openAccount, TOpenAccountData } from "@/app/services/auth";
+import { TOpenAccountModal } from "fox-neo-design-system/dist/components/Modal/types";
+import { useMutations } from "@/hooks/useMutations";
 
-export function OpenAccountModal({open, onClose}: TModal) {
-    const { register, handleSubmit, clearErrors , formState:{ errors } , reset} = useForm<TOpenAccountFormModal>({
+export function OpenAccountModal({open, onClose, onOpenLoginModal}: TOpenAccountModal) {
+    const { register, handleSubmit, clearErrors , formState:{ errors } , reset} = useForm<TOpenAccountData>({
         defaultValues: {
-            name: null,
-            email: null,
-            password: null,
-            acceptTerm: null,
+            fullName: undefined,
+            email: undefined,
+            birthDate: undefined,
+            password: undefined,
+            acceptTerm: undefined,
         },
     })
 
-    const onSubmit = (data: TOpenAccountFormModal) => {
-        console.log({data})
-        reset()
-        clearErrors()
-        onClose()
+    const { mutateAsync , isPending} = useMutations({
+        mutationFn: openAccount,
+        onSuccess: () => {    
+            reset()
+            clearErrors()
+            onClose()
+            
+            setTimeout(() => {
+                onOpenLoginModal()
+            }, 300);
+    
+        }
+    })
+
+
+    if(isPending) return <h1>Carregando...</h1>
+
+    const onSubmit = async (data: TOpenAccountData) => {
+       await mutateAsync(data)
     }
 
     const onCancel = () => {
         clearErrors()
         onClose()
     }
+
+
 
   return (
     <Modal.Root open={open} onClose={onCancel}>
@@ -38,9 +57,18 @@ export function OpenAccountModal({open, onClose}: TModal) {
                 <FormGroupRoot>
                     <FormGroupLabel htmlFor="field-1">Nome</FormGroupLabel>
                     <Input 
-                        {...register("name", { required: {value: true, message: "*Campo obrigatório"} })}
+                        {...register("fullName", { required: {value: true, message: "*Campo obrigatório"} })}
                     />
-                    <ErrorMessage fieldName="name" errors={errors} />
+                    <ErrorMessage fieldName="fullName" errors={errors} />
+                </FormGroupRoot>
+
+                <FormGroupRoot>
+                    <FormGroupLabel htmlFor="field-1">Data de nascimento</FormGroupLabel>
+                    <Input 
+                        type="date"
+                        {...register("birthDate", { required: {value: true, message: "*Campo obrigatório"} })}
+                    />
+                    <ErrorMessage fieldName="birthDate" errors={errors} />
                 </FormGroupRoot>
 
                 <FormGroupRoot> 

@@ -2,10 +2,16 @@ import mongoose, { Schema } from 'mongoose';
 
 const TransactionSchema = new Schema({
   amount: { type: Number, required: true },
-  type: { type: String, enum: ['SEND', 'RECEIVE', 'DEPOSIT'], required: true },
-  description: { type: String, required: true },
-  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true }, 
-  targetAccountId: { type: Schema.Types.ObjectId, ref: 'Account' }, 
+  nature: { type: String, enum: ['TRANSFER'], required: true },
+  direction: { type: String, enum: ['INCOMING', 'OUTGOING'], required: true },
+  description: { type: String, required: false },
+  
+  senderId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  senderName: { type: String, required: true },
+  
+  receiverId: { type: Schema.Types.ObjectId, ref: 'User' },
+  receiverName: { type: String },
+  
 }, { timestamps: true });
 
 

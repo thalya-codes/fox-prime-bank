@@ -1,70 +1,72 @@
 'use client'
 import Image from "next/image";
-import { Button, Card, Input } from "fox-neo-design-system"
-import MagnifyingGlassIcon from "@/assets/magnifying-glass.svg";    
+import { Card } from "fox-neo-design-system"
 import TrashBinIcon from "@/assets/trash-bin.svg";    
 import EditIcon from "@/assets/edit.svg";    
 import { useState } from "react";
 import { EditBankStatementModal } from "../Modals/EditBankStatementModal";
 import { DeleteBankStatementModal } from "../Modals/DeleteBankStatementModal";
+import { useAccountContext } from "@/app/context/AccountContext";
+import { useMutations } from "@/hooks/useMutations";
+import { deleteTransaction, editTransaction } from "@/app/services/transactions";
 
 export function BankStatements() {
     const [openEdiTransactionModal, setOpenEdiTransactionModal] = useState(false);
     const [openDeleteTransactionModal, setOpenDeleteTransactionModal] = useState(false);
     const [beneficiaryName, setBeneficiaryName] = useState<string>('');
+    const [transactionId, setTransactionId] = useState<null |string>(null)
+    const { transactions }  = useAccountContext()
+    const { mutateAsync: mutateDeleteTransaction } = useMutations({
+        mutationFn: deleteTransaction,
+        onSuccess: async () => {
+            setOpenDeleteTransactionModal(false)
+        }
+    })
 
-    const transactions = [
-        {   
-            id: 10,
-            name: 'Floricultura Mary Fernades S.A',
-            amount: '96,55',
-            date: '2025-05-28T00:00:00.000Z'
-        },
-        {
-            id: 11,
-            name: 'Beleza na Web',
-            amount: '96,55',
-            date: '2025-05-28T00:00:00.000Z'
-        },
-        {
-            id: 12,
-            name: 'Amazon',
-            amount: '96,55',
-            date: '2025-05-28T00:00:00.000Z'
-        },
-    ]
+     const { mutateAsync: mutateEditTransaction } = useMutations({
+        mutationFn: editTransaction,
+        onSuccess: async () => {
+            setOpenEdiTransactionModal(false)
+        }
+    })
+
+    const onConfirmStatementDeletation = async () => {
+        await mutateDeleteTransaction(transactionId!)
+        await transactions?.refetch()
+    }
+
+    const onEditStatement = async () => {
+        await mutateEditTransaction({transactionId, receiverName: beneficiaryName})
+        await transactions?.refetch()
+    }
+
 
   return  (
         <>
-            <Card.Root variant="outlined" className="flex flex-col gap-7 xl:w-5/12">
+            <Card.Root variant="outlined" className="flex flex-col gap-7 xl:w-5/12 overflow-auto bg-red-400">
                 <Card.Title className="text-brand-800 text-center" size='lg'>Extratos</Card.Title>
-                <div className="flex justify-between gap-3">
-                    <Input className="w-full" placeholder="Buscar transação"/>
-                    <Button>
-                        <Image 
-                            src={MagnifyingGlassIcon} 
-                            width={30} 
-                            height={30} 
-                            alt="Pesquisar" 
-                        />
-                    </Button>
-                </div>
-
-                <ul className="flex flex-col gap-6">
-                    {transactions?.map((item) => (
-                        <Card.Root key={item.id}>
+                <ul className="flex flex-col gap-6 h-full">
+                    {transactions?.data?.map((item) => (
+                        <Card.Root key={item._id}>
                             <div className="flex justify-between">
                                 <Card.Title className="text-brand-800">Transferência</Card.Title>
 
                                 <div className="flex gap-2">
                                     <button onClick={() => {
-                                        setBeneficiaryName(item.name)
+                                        setTransactionId(item._id)
+
+                                        setBeneficiaryName(item.receiverName)
                                         setOpenEdiTransactionModal(true)
                                     }}>
                                         <Image src={EditIcon} alt="V" width={20}/>
                                     </button>
                                 
-                                    <button  onClick={() => setOpenDeleteTransactionModal(true)}>
+                                    <button  
+                                        onClick={() => {
+                                            setTransactionId(item._id)
+                                            setOpenDeleteTransactionModal(true)
+                                        }}
+                                    >
                                         <Image 
                                             src={TrashBinIcon} 
                                             alt="Deletar transação" 
@@ -74,16 +76,15 @@ export function BankStatements() {
                                 </div>
                             </div>
 
-                            <Card.Paragraph>{item.name}</Card.Paragraph>
+                            <Card.Paragraph>{item.receiverName}</Card.Paragraph>
 
                             <div className="flex justify-between">
                                 <Card.Paragraph>R$ {item.amount}</Card.Paragraph>
-                                <Card.Paragraph>{new Date(item.date).toLocaleDateString('br')}</Card.Paragraph>
+                                <Card.Paragraph>{new Date(item.createdAt).toLocaleDateString('br')}</Card.Paragraph>
                             </div>
                         </Card.Root>
                     ))}
                 </ul>
-                <Button>Carregar mais</Button>
             </Card.Root>
 
             <EditBankStatementModal 
@@ -91,11 +92,13 @@ export function BankStatements() {
                 open={openEdiTransactionModal} 
                 onClose={() => setOpenEdiTransactionModal(false)}
                 setBeneficiaryName={setBeneficiaryName}
+                onEditStatement={onEditStatement}
             />
 
             <DeleteBankStatementModal 
                 open={openDeleteTransactionModal} 
                 onClose={() => setOpenDeleteTransactionModal(false)}
+                onConfirmStatementDeletation={onConfirmStatementDeletation}
             />
         </>
     )

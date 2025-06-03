@@ -1,26 +1,44 @@
+'use client'
 import { Button, FormGroupLabel, FormGroupRoot, Input, Modal, TModal } from "fox-neo-design-system";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "../ErrorMessage";
 import { TFormModalSharedProps } from "./types";
+import { signIn, TCredenditals } from "@/app/services/auth";
+import { useMutations } from "@/hooks/useMutations";
+import { useRouter } from "next/navigation";
+import { TApiRequest } from "@/app/lib/request";
 
 export function LoginModal({ open, onClose }: TModal) {
+    const { push } = useRouter()
     const { register, reset, handleSubmit, clearErrors, formState:{ errors } } = useForm<TFormModalSharedProps>({
          defaultValues: {
-            email: null,
-            password: null,
+            email: undefined,
+            password: undefined,
         },
     })
 
-    const onSubmit = (data: TFormModalSharedProps) => {
-        console.log({data})
-        reset()
-        onClose()
+
+    const { mutateAsync , isPending} = useMutations<TCredenditals>({
+        mutationFn: signIn as (data: TCredenditals) => Promise<TApiRequest>,
+        onSuccess: () => { 
+            push('/account')
+            reset()
+            clearErrors()
+            onClose()
+        }
+    })
+
+    if(isPending) return <h2>Carregand ...</h2>
+
+    const onSubmit = async (data: TCredenditals) => {
+        await mutateAsync(data)
     }
 
     const onCancel = () => {
         clearErrors()
         onClose()
     }
+
 
   return (
     <Modal.Root open={open} onClose={onCancel}>

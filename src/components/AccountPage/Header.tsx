@@ -3,12 +3,25 @@ import { Avatar, Button, Dropdown } from "fox-neo-design-system";
 import { useRouter } from "next/navigation";
 import ChevronLeftIcon from '@/assets/chevron-left-arrow.svg';
 import Image from "next/image";
+import { useAccountContext } from "@/app/context/AccountContext";
+import { useMutations } from "@/hooks/useMutations";
+import { logout } from "@/app/services/auth";
 
 export function Header() {
     const { back , push } = useRouter()
+    const { userName } = useAccountContext()
+    const { mutateAsync } = useMutations({
+        mutationFn: logout,
+        onSuccess: () => push('/')
+    })
     const userProfileMenu  = [
         { text: "Configurações", onClick: () => push('/account/configuration') },
-        { text: "Sair", onClick: () => console.log("click sair") },
+        { 
+            text: "Sair", 
+            onClick: () => {
+                mutateAsync()
+            } 
+        },
     ];
 
     return (
@@ -25,7 +38,7 @@ export function Header() {
             <div className="flex justify-end w-full">
                 <Dropdown items={userProfileMenu}>
                     <Avatar 
-                        name="Thalya Stéffany"
+                        name={userName!}
                         size="sm"
                     />
                 </Dropdown>

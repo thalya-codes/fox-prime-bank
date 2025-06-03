@@ -3,17 +3,14 @@
 import { Button, FormGroupLabel, FormGroupRoot, Input, Modal } from "fox-neo-design-system";
 import { TransactionTypeField } from "../AccountPage/TransactionTypeField";
 import { TEditBankStatementModal } from "./types";
-import { useState } from "react";
-import { TTransactionTypeFieldValues } from "../AccountPage/types";
 
 export function EditBankStatementModal({ 
     open, 
     name, 
-    transactionType, 
     onClose, 
-    setBeneficiaryName
+    setBeneficiaryName,
+    onEditStatement
 }: TEditBankStatementModal) {
-    const [transactionTypeValue, setTransactionTypeValue] = useState<TTransactionTypeFieldValues | undefined>(transactionType)
 
     return (
         <Modal.Root open={open} onClose={onClose}>
@@ -28,13 +25,13 @@ export function EditBankStatementModal({
                 </FormGroupRoot>
 
                 <TransactionTypeField 
-                    defaultValue={transactionTypeValue} 
+                    defaultValue={'TRANSFER'} 
                 />
             </Modal.Body>
 
             <Modal.Footer>
                 <Button variant="outline" onClick={onClose}>Cancelar</Button>
-                <Button onClick={onClose}>Salvar</Button>
+                <Button onClick={onEditStatement}>Salvar</Button>
             </Modal.Footer>
         </Modal.Root>
     )

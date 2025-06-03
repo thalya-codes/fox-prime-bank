@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Refresh token inválido' }, { status: 403 });
     }
 
-    const newAccessToken = generateAccessToken(user._id);
+    const newAccessToken = generateAccessToken(user._id, user.fullName);
 
     return NextResponse.json({ accessToken: newAccessToken });
   } catch {

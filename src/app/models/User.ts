@@ -6,7 +6,8 @@ export type TUser  =  {
   email: string;
   password: string;
   refreshToken: string | null;
-  _id: string
+  _id: string;
+  acceptTerm: boolean
 } & Document
 
 
@@ -16,6 +17,7 @@ const UserSchema = new Schema<TUser>({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   refreshToken: { type: String, default: null },
+  acceptTerm: { type: Boolean, required: true, default: null },
 });
 
 export default mongoose.models.User || mongoose.model<TUser>('User', UserSchema);
