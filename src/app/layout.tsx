@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Providers } from './providers';
+import { ToastContainer } from 'react-toastify';
 import "../app/globals.css";
 
 export const metadata: Metadata = {
@@ -19,7 +21,7 @@ export default function RootLayout({
         
         <main className="relative w-full flex justify-center">
           <div className="bg-neutral-0 w-3/4   flex flex-col justify-center px-9 py-10 mt-9 rounded-xl shadow-lg">
-            {children}
+            <Providers>{children}</Providers>
           </div>
         </main>
 
@@ -27,6 +29,7 @@ export default function RootLayout({
             <p className="font-body font-semibold text-base leading-8 text-brand-950 pb-5 pt-8">© Banco Fox Prime S.A -  Instituição de pagamentos 00.000/00001-00</p>
           </footer>
       </body>
+      <ToastContainer theme="light" />
     </html>
   );
 }
