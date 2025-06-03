@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🦊 Fox Prime Bank
 
-## Getting Started
+**Fox Prime Bank** é uma aplicação robusta desenvolvida com foco na gestão de contas bancárias, autenticação segura e operações de transações.
 
-First, run the development server:
+## 🚀 Tecnologias utilizadas
+
+- **Next.js** — Framework React para desenvolvimento fullstack.
+- **Toastify** — Notificações amigáveis e customizadas.
+- **Tailwind CSS** — Estilização rápida e eficiente.
+- **React Query** — Gerenciamento de estado assíncrono e cache.
+- **MongoDB** — Banco de dados NoSQL.
+- **JWT** — Autenticação via token.
+
+---
+
+## ▶️ Como rodar o projeto
+
+1. Clone o repositório:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <url-do-repositorio>
+cd fox-prime-bank
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Instale as dependências:
+```bash
+npm install
+```
+3. Inicie a aplicação:
+ ```bash
+npm run dev
+```
+## 📚 Endpoints da API
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+A estrutura de rotas do projeto está organizada da seguinte forma:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `/api/account/[userId]`  
+  Gerenciamento de contas bancárias.
 
-## Learn More
+- `/api/auth/`
+  - `/login` — Autenticação do usuário.
+  - `/logout` — Encerrar sessão.
+  - `/register` — Cadastro de novo usuário.
+  - `/refresh` — Renovação de token.
+  - `/change-password` — Alteração de senha.
 
-To learn more about Next.js, take a look at the following resources:
+- `/api/transactions/[userId]/[transactionId]`  
+  CRUD de transações financeiras.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `/api/users/[id]`  
+  Gestão de usuários.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🎨 Design System
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Para garantir uma **maior consistência visual** entre os produtos da empresa, foi desenvolvido um **Design System** próprio. Que pode ser conferido no link abaixo.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### [Fox Neo Design System](https://github.com/thalya-codes/fox-neo-design-system)
