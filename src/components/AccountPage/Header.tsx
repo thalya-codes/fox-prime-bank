@@ -27,12 +27,14 @@ export function Header() {
     return (
         <header className="flex justify-center items-center gap-7">
             <Button variant="link" onClick={() => back()}>
-                <Image 
-                    src={ChevronLeftIcon}
-                    alt="Ícone seta virada para esquerda"
-                    width={20}
-                />
-                <span>Voltar</span>
+                <p className="flex gap-2">
+                    <Image 
+                        src={ChevronLeftIcon}
+                        alt="Ícone seta virada para esquerda"
+                        width={20}
+                    />
+                    <span>Voltar</span>
+                </p>
             </Button>
 
             <div className="flex justify-end w-full">
