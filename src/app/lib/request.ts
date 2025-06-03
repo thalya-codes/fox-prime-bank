@@ -1,16 +1,17 @@
 import { verifyIfUserHasAccessToken } from "./localStorage";
 
-export type TApiRequest<T> = {
-  responseData: T 
+export type TApiRequest = {
+  responseData: { message?: string ,  accessToken?: string } 
   accessToken: string | null
+  status: number
 }
 
-export async function apiRequest<T>(
+export async function apiRequest(
   endpoint: string,
   method: 'POST' | 'GET' | 'PUT' | 'DELETE',
   data?: unknown,
   auth: boolean = false
-): Promise<TApiRequest<T> | undefined> {
+): Promise<TApiRequest | undefined> {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
 
   let accessToken: string | null = null;
@@ -28,5 +29,5 @@ export async function apiRequest<T>(
   });
 
   const responseData = await response.json();
-  return { responseData, accessToken };
+  return { responseData, accessToken, status:  response.status};
 }
