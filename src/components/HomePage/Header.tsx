@@ -6,10 +6,20 @@ import { HeaderCreditCard } from "./HeaderCreditCard";
 import { HomePageSlogan } from "./HomePageSlogan";
 import { OpenAccountModal } from "../Modals/OpenAccountModal";
 import { LoginModal } from "../Modals/LoginAccountModal";
+import { verifyIfUserHasAccessToken } from "@/app/lib/localStorage";
+import { useRouter } from "next/navigation";
 
 export function HomePageHeader() {
     const [openAccountModal, setOpenAccountModal] = useState(false)
     const [openLoginModal, setOpenLoginModal] = useState(false)
+    const {push} = useRouter()
+
+    const handleOpenLoginModal= () => {
+        const  hasAccessToken = verifyIfUserHasAccessToken()
+        if(!hasAccessToken) return setOpenLoginModal(true);
+
+        push('/account')
+    }
 
     return (
         <>
@@ -26,7 +36,7 @@ export function HomePageHeader() {
                         <ul className="w-full flex gap-4">
                             <li><Button variant="link">Início</Button></li>
                             <li><Button variant="link" onClick={() => setOpenAccountModal(true)}>Abrir conta</Button></li>
-                            <li><Button variant="outline" onClick={() => setOpenLoginModal(true)}>Acessar conta</Button></li>
+                            <li><Button variant="outline" onClick={handleOpenLoginModal}>Acessar conta</Button></li>
                         </ul>
                     </nav>
                 </div>
@@ -36,7 +46,11 @@ export function HomePageHeader() {
                     <HeaderCreditCard />
                 </div>
             </header>
-            <OpenAccountModal open={openAccountModal} onClose={() => setOpenAccountModal(false)} />
+            <OpenAccountModal 
+                open={openAccountModal} 
+                onClose={() => setOpenAccountModal(false)} 
+                onOpenLoginModal={() => setOpenLoginModal(true)}
+            />
             <LoginModal open={openLoginModal} onClose={() => setOpenLoginModal(false)}/>
         </>
     )
