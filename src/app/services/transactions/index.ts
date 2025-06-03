@@ -5,7 +5,7 @@ type TDepositAmountTransaction = {
   fromAccountNumber: string;
   toAccountNumber: string;
   amount: number;
-  description?: string
+  description?: string | null
   nature: "TRANSFER" 
 }
 
@@ -79,6 +79,27 @@ export async function deleteTransaction(transactionId: string) {
     headers: {
       Authorization: `Bearer ${accessToken}`
     }
+  });
+  
+  const responseData = await response.json()
+
+  return responseData
+}
+
+export async function editTransaction(data) {
+  const accessToken =  verifyIfUserHasAccessToken()
+  if(!accessToken) return;
+
+  const decodedInfos = getDecodedAccessInfo(accessToken)
+  if(!decodedInfos) return;
+
+
+  const response = await fetch(`/api/transactions/${decodedInfos.userId}/${data?.transactionId}`, {
+    method: 'PATCH',
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    },
+    body: JSON.stringify({ receiverName: data?.receiverName })
   });
   
   const responseData = await response.json()
