@@ -18,5 +18,25 @@ export async function getUserBalance() {
   
   const responseData = await response.json()
 
-  return responseData.message || responseData.balance
+  return responseData[0].balance
+}
+
+export async function getUserAccount() {
+  const accessToken =  verifyIfUserHasAccessToken()
+  if(!accessToken) return;
+
+  const decodedInfos = getDecodedAccessInfo(accessToken)
+  if(!decodedInfos) return;
+
+
+  const response = await fetch(`/api/account/${decodedInfos.userId}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  });
+  
+  const responseData = await response.json()
+
+  return responseData[0]
 }
