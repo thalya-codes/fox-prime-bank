@@ -7,7 +7,7 @@ export type TFormModalSharedProps = {
 }
 
 export type TOpenAccountFormModal = {
-    name: string | null
+    fullname: string | null
     acceptTerm: boolean| null
 } & TFormModalSharedProps
 
@@ -16,4 +16,5 @@ export type TEditBankStatementModal = {
     transactionType?: 0 | 1 | 2
     name: string
     setBeneficiaryName: Dispatch<SetStateAction<string>>
+    onEditStatement: () => void
 } & TModal
