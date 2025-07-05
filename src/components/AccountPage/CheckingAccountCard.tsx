@@ -1,3 +1,5 @@
+'use client'
+
 import Image from "next/image";
 import EyeOffIcon from "@/assets/eye-off.svg";
 import { CreditCard } from "fox-neo-design-system/dist/components/CreditCard/compositions";
@@ -6,7 +8,12 @@ import { useState } from "react";
 
 export function CheckingAccountCard() {
     const {userAccount} = useAccountContext()
-    const [showBalance, setShowBalance] = useState<boolean>(JSON.parse(localStorage.getItem('show-balance') || '') || false)
+    const showStoragedBalance = localStorage.getItem('show-balance')
+    const [showBalance, setShowBalance] = useState<boolean>( 
+        showStoragedBalance ? 
+            JSON.parse(showStoragedBalance) 
+            : false
+    )
     
     const toggleBalanceVisibility = () => {
         setShowBalance((prev) => {
