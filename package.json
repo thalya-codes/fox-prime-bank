@@ -15,7 +15,7 @@
     "bcryptjs": "^3.0.2",
     "cookie": "^1.0.2",
     "express": "^5.1.0",
-    "fox-neo-design-system": "^1.0.1",
+    "fox-neo-design-system": "1.0.4",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "mongoose": "^8.15.1",
