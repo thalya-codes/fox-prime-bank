@@ -1,4 +1,4 @@
-import { CreditCard } from "fox-neo-design-system/dist/components/CreditCard/compositions";
+import { CreditCard } from "fox-neo-design-system/dist/components/CreditCard/compositions/index.js";
 
 export function HeaderCreditCard() {
     return (

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useState } from "react";
 import { Button } from "fox-neo-design-system";
 import Image from "next/image";

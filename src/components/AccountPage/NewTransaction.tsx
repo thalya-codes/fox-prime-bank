@@ -1,3 +1,5 @@
+'use client';
+
 import { Button, Card, FormGroupLabel, FormGroupRoot, Input } from "fox-neo-design-system";
 import { TransactionTypeField } from "./TransactionTypeField";
 import { depositAmount } from "@/app/services/transactions";

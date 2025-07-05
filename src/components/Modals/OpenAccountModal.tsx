@@ -1,3 +1,4 @@
+'use client';
 import { useForm } from "react-hook-form";
 import { Button, Checkbox, FormGroupLabel, FormGroupRoot, Input, Modal } from "fox-neo-design-system";
 import { ErrorMessage } from "../ErrorMessage";

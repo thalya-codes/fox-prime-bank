@@ -1,3 +1,5 @@
+'use client';
+
 import { scheduleTokenRefresh } from "@/app/lib/auth";
 import { verifyIfUserHasAccessToken } from "@/app/lib/localStorage";
 import { refreshAccessToken } from "@/app/services/auth";
