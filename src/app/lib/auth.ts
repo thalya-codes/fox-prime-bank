@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import {jwtDecode} from 'jwt-decode';
 import { TUser } from '../models/User';
+import { ENV_JWT_ACCESS_SECRET, ENV_JWT_REFRESH_SECRET } from '@/constants/envsConstants';
 
 export type TTokenPayload = {
   userId: string;
@@ -9,23 +10,21 @@ export type TTokenPayload = {
   exp: number;
 }
 
-const ACCESS_SECRET = process.env.ACCESS_SECRET!;
-const REFRESH_SECRET = process.env.REFRESH_SECRET!;
 
 export function generateAccessToken(userId: string, fullName: string) {
-  return jwt.sign({ userId, fullName }, ACCESS_SECRET, { expiresIn: '20m' });
+  return jwt.sign({ userId, fullName }, ENV_JWT_ACCESS_SECRET, { expiresIn: '20m' });
 }
 
 export function generateRefreshToken(userId: string) {
-  return jwt.sign({ userId }, REFRESH_SECRET, { expiresIn: '7d' });
+  return jwt.sign({ userId }, ENV_JWT_REFRESH_SECRET, { expiresIn: '7d' });
 }
 
 export function verifyAccessToken(token: string) {
-  return jwt.verify(token, ACCESS_SECRET);
+  return jwt.verify(token, ENV_JWT_ACCESS_SECRET);
 }
 
 export function verifyRefreshToken(token: string) {
-  return jwt.verify(token, REFRESH_SECRET) as Omit<TUser, '_id'> & {userId: string};
+  return jwt.verify(token, ENV_JWT_REFRESH_SECRET) as Omit<TUser, '_id'> & {userId: string};
 }
 
 
